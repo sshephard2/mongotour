@@ -5,5 +5,8 @@
   "main": "app.js",
   "author": {
     "name": "s.shephard2"
+  },
+  "dependencies": {
+    "mongodb": "^2.2.28"
   }
 }
