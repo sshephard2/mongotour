@@ -1,0 +1,9 @@
+{
+  "name": "mongo-tour",
+  "version": "0.0.0",
+  "description": "MongoTour",
+  "main": "app.js",
+  "author": {
+    "name": "s.shephard2"
+  }
+}
