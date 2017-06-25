@@ -65,6 +65,31 @@ var findFilms = function (db, callback) {
     });
 };
 
+// Count films per year by map reduce
+var filmsPerYear = function (db, callback) {
+    // Get the films collection
+    var collection = db.collection("films");
+
+    // Map function - emit year as key and 1 as value
+    var map = function () { emit(this.year, 1); };
+
+    // Reduce function
+    var reduce = function (k, v) {
+        // As each value of v has been mapped to 1, their sum is the number of values
+        return v.length;
+    };
+
+    // Perform the map reduce
+    collection.mapReduce(map, reduce, { out: { replace: 'tempCollection' } }, function (err, collection) {
+        collection.find().toArray(function (err, docs) {
+            assert.equal(err, null);
+            console.log("Map reduce results");
+            console.log(docs)
+            callback(docs);
+        });
+    });
+};
+
 var MongoClient = require('mongodb').MongoClient
     , assert = require('assert');
 
@@ -77,7 +102,7 @@ MongoClient.connect(url, function (err, db) {
     console.log("Connected successfully to server");
 
     insertFilms(db, function () {
-        findFilms(db, function () {
+        filmsPerYear(db, function () {
             db.close();
         });
     });
